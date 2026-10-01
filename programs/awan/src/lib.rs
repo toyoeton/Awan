@@ -1,25 +1,27 @@
-pub mod constants;
-pub mod error;
-pub mod instructions;
-pub mod state;
-
 use anchor_lang::prelude::*;
 
+mod constants;
+mod error;
+mod instructions;
+mod state;
+ 
+use error::*;
+use instructions::*;
 pub use constants::*;
-pub use instructions::*;
-pub use state::*;
 
 declare_id!("8vZNXTex9JmPAADsTXVwwfTfVXUjbLBaTtassLD8dqvN");
 
 #[program]
 pub mod awan {
     use super::*;
-
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        crate::instructions::initialize::handle_initialize(ctx)
+ 
+    pub fn create_duel(ctx: Context<CreateDuel>, min_price: u64, max_price: u64) -> Result<()> {
+        ctx.accounts.create_duel(min_price, max_price, &ctx.bumps)?;
+        Ok(())
     }
-
-    pub fn increment(ctx: Context<Increment>) -> Result<()> {
-        crate::instructions::increment::handle_increment(ctx)
+ 
+    pub fn join_duel(ctx: Context<JoinDuel>, opening_bid: u64) -> Result<()> {
+        ctx.accounts.join_duel(opening_bid)?;
+        Ok(())
     }
 }
