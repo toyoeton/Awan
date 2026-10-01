@@ -24,4 +24,9 @@ pub mod awan {
         ctx.accounts.join_duel(opening_bid)?;
         Ok(())
     }
+
+    pub fn raise(ctx: Context<Raise>, new_bid: u64) -> Result<()> {
+        ctx.accounts.raise(new_bid)?;
+        Ok(())
+    }
 }
