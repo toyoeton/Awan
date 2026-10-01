@@ -29,4 +29,9 @@ pub mod awan {
         ctx.accounts.raise(new_bid)?;
         Ok(())
     }
+
+    pub fn concede(ctx: Context<Concede>) -> Result<()> {
+        ctx.accounts.concede(&ctx.bumps)?;
+        Ok(())
+    }
 }
