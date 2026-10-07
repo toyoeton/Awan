@@ -1,4 +1,3 @@
-
 use anchor_lang::prelude::*;
 use anchor_lang::system_program::{transfer, Transfer};
 
@@ -43,6 +42,10 @@ impl<'info> JoinDuel<'info> {
             self.duel.bid_a = opening_bid;
         } else {
             require!(self.duel.bidder_b == Pubkey::default(), AwanError::DuelNotFull);
+            require!(
+                self.bidder.key() != self.duel.bidder_a,
+                AwanError::AlreadyJoined
+            );
             self.duel.bidder_b = self.bidder.key();
             self.duel.bid_b = opening_bid;
             // Both bidders are in, the duel goes live. bidder_a raises first.

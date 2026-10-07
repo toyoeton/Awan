@@ -12,7 +12,9 @@ import {
   sendAndConfirmTransactionFactory,
   getSignatureFromTransaction,
 } from "@solana/kit";
-import { Connection, Keypair, LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
+
+const AWAN_PROGRAM_ID = new PublicKey("8vZNXTex9JmPAADsTXVwwfTfVXUjbLBaTtassLD8dqvN");
 import { createMint, getOrCreateAssociatedTokenAccount, mintTo } from "@solana/spl-token";
 import { getCreateDuelInstructionAsync } from "./clients/js/src/generated";
 
@@ -35,6 +37,11 @@ async function main() {
 
   console.log("Seller:", sellerKeypair.publicKey.toBase58());
   console.log("NFT mint:", nftMintPubkey.toBase58());
+
+  const [duelPda] = PublicKey.findProgramAddressSync(
+    [Buffer.from("duel"), nftMintPubkey.toBuffer(), sellerKeypair.publicKey.toBuffer()],
+    AWAN_PROGRAM_ID
+  );
 
   // --- Switch to the generated Codama client to actually call create_duel ---
   const rpc = createSolanaRpc("http://127.0.0.1:8899");
@@ -69,6 +76,7 @@ async function main() {
 
   console.log("\nDuel created via the generated Codama client!");
   console.log("Signature:", getSignatureFromTransaction(signedTransaction));
+  console.log("Duel PDA (paste this into the frontend):", duelPda.toBase58());
 }
 
 main().catch((err) => {

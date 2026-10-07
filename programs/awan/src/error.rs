@@ -19,4 +19,12 @@ pub enum AwanError {
 
     #[msg("This duel has already been settled.")]
     DuelSettled,
+
+    #[msg("This bidder has already joined this duel.")]
+    AlreadyJoined,
 }
+
+
+ 
+
+ 
