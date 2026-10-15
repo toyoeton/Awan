@@ -9,8 +9,11 @@ skip-lint = false
 [programs.localnet]
 awan = "8vZNXTex9JmPAADsTXVwwfTfVXUjbLBaTtassLD8dqvN"
 
+[programs.devnet]
+awan = "8vZNXTex9JmPAADsTXVwwfTfVXUjbLBaTtassLD8dqvN"
+
 [provider]
-cluster = "localnet"
+cluster = "devnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]

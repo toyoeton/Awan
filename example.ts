@@ -55,6 +55,7 @@ async function main() {
     nftMint,
     minPrice: 2_000_000_000n,
     maxPrice: 10_000_000_000n,
+    durationSeconds: 3600n,
   });
 
   const { value: latestBlockhash } = await rpc.getLatestBlockhash().send();

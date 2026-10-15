@@ -6,3 +6,8 @@ node_modules
 test-ledger
 .yarn
 .surfpool
+
+# Local build output and private demo preparation notes
+app/dist/
+**/*.tsbuildinfo
+DEMO_DAY.md
