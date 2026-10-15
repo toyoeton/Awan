@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root { font-family: 'DM Sans', sans-serif; color: #eae9e4; background: #10110f; font-synthesis: none; }
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; min-height: 100vh; background: radial-gradient(ellipse at 50% -15%, #28291e 0, #161713 42%, #10110f 78%); }
+button, input { font: inherit; }
+.awan-app { width: min(100% - 40px, 760px); margin: 0 auto; padding: 30px 0 72px; }
+.awan-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:44px; }
+.brand-lockup { display:flex; gap:12px; align-items:center; }
+.brand-mark { display:grid; place-items:center; width:42px; height:42px; border-radius:13px; color:#14150f; background:#d5f36a; font:700 23px 'Space Grotesk',sans-serif; transform:rotate(-4deg); }
+.awan-header h1 { margin:0; font:700 22px 'Space Grotesk',sans-serif; letter-spacing:-.8px; }
+.brand-period { color:#d5f36a; }
+.awan-endpoint { margin:1px 0 0; color:#85867d; font-size:12px; }
+.awan-header .wallet-adapter-button { height:40px; padding:0 15px; border:1px solid #3a3c32; border-radius:10px; background:#20211b; color:#ecece6; font:600 13px 'DM Sans',sans-serif; transition:.18s ease; }
+.awan-header .wallet-adapter-button:hover { background:#2a2c22; }
+.awan-wallet-line { display:flex; align-items:center; gap:8px; margin:-25px 0 30px; color:#a7a89e; font-size:12px; }
+.awan-wallet-line code { max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding:5px 8px; border:1px solid #303129; border-radius:6px; background:#191a16; color:#c5c6b9; font:11px 'DM Mono',monospace; }
+.connection-dot { width:7px; height:7px; border-radius:50%; background:#a8d64f; box-shadow:0 0 10px #a8d64f70; }
+.intro { margin:0 0 30px; }
+.eyebrow,.step-label { color:#a8c65c; font:500 10px 'DM Mono',monospace; letter-spacing:1.15px; }
+.intro h2 { margin:13px 0 10px; color:#f0efe9; font:600 clamp(38px,8vw,56px)/.98 'Space Grotesk',sans-serif; letter-spacing:-2.7px; }
+.intro h2 span { color:#a8a99e; }
+.intro>p:last-child { margin:0; color:#92938a; font-size:14px; }
+.awan-card { padding:23px; margin:0 0 14px; border:1px solid #303129; border-radius:15px; background:linear-gradient(145deg,#1c1d18,#191a16); box-shadow:0 12px 32px #00000013; }
+.section-heading { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
+.section-heading h2,.awan-card h2 { margin:5px 0 0; color:#f1f0e9; font:600 19px 'Space Grotesk',sans-serif; letter-spacing:-.4px; }
+.heading-icon { display:grid; place-items:center; width:34px; height:34px; border:1px solid #35372c; border-radius:10px; color:#c0d977; font-size:18px; }
+.awan-row { display:flex; align-items:center; gap:9px; flex-wrap:wrap; }
+.awan-input { min-width:0; flex:1; height:44px; padding:0 13px; border:1px solid #383a31; border-radius:9px; outline:none; background:#131410; color:#eeeee8; font-size:13px; transition:border-color .16s,box-shadow .16s; }
+.awan-input:focus { border-color:#9ab84b; box-shadow:0 0 0 3px #a8c65c19; }
+.awan-input::placeholder { color:#696b62; }
+.awan-pda-input { font:12px 'DM Mono',monospace; }
+.awan-button { min-height:42px; padding:0 15px; border:1px solid #414238; border-radius:9px; background:#282920; color:#e9e9e2; cursor:pointer; font-size:13px; font-weight:600; transition:background .16s,border-color .16s,transform .16s; }
+.awan-button:hover:not(:disabled) { border-color:#62654d; background:#33352a; transform:translateY(-1px); }
+.awan-button:disabled { opacity:.42; cursor:not-allowed; }
+.awan-button-primary { border-color:#d5f36a; background:#d5f36a; color:#1b2010; }
+.awan-button-primary:hover:not(:disabled) { border-color:#e2ff80; background:#e2ff80; }
+.awan-button-danger { margin-top:8px; border-color:#613b37; background:#321e1c; color:#f0aaa2; }
+.awan-button-danger:hover:not(:disabled) { border-color:#96524b; background:#442522; }
+.awan-card p.hint { margin:0 0 15px; color:#8e8f85; font-size:12px; line-height:1.6; }
+.input-suffix { color:#999a90; font-size:12px; white-space:nowrap; }
+.role-switch-card { margin-bottom:18px; }
+.role-switch { display:flex; gap:10px; }
+.role-button { flex:1; }
+.role-button-active { background:#d5f36a; border-color:#d5f36a; color:#11150a; }
+.nft-visual-card { width:100%; }
+.nft-visual { position:relative; overflow:hidden; min-height:250px; border:1px solid rgba(255,255,255,.12); border-radius:18px; padding:16px; display:flex; flex-direction:column; justify-content:space-between; box-shadow:inset 0 0 30px rgba(255,255,255,.08); }
+.nft-visual__header, .nft-visual__footer { display:flex; justify-content:space-between; align-items:center; gap:10px; }
+.nft-visual__header span { color:#1a1a17; font:700 10px 'DM Mono',monospace; letter-spacing:1px; text-transform:uppercase; }
+.nft-visual__art { position:relative; display:grid; place-items:center; height:120px; }
+.nft-visual__orb { position:relative; width:120px; height:120px; border-radius:50%; border:2px solid rgba(17,21,10,.65); background:radial-gradient(circle at 28% 25%, rgba(255,255,255,.95), rgba(255,255,255,.15) 18%, rgba(18,20,16,.12) 52%, rgba(18,20,16,.72) 100%); box-shadow:0 0 50px rgba(255,255,255,.18); }
+.nft-visual__ring { position:absolute; width:176px; height:176px; border:1px solid rgba(16,17,15,.45); border-radius:50%; transform:rotate(18deg); }
+.nft-visual__footer strong { color:#11150a; font:700 20px 'Space Grotesk',sans-serif; letter-spacing:-.7px; }
+.nft-visual__footer small { color:#20251b; font:600 10px 'DM Mono',monospace; }
+.nft-hero { display:grid; grid-template-columns: 220px minmax(0,1fr); gap:16px; margin-top:18px; align-items:center; }
+.nft-hero__details { min-width:0; }
+.nft-hero__details h3 { margin:8px 0 6px; color:#f4f3ef; font:600 24px 'Space Grotesk',sans-serif; letter-spacing:-.8px; }
+.nft-hero__details p { margin:0; color:#9d9f92; font-size:13px; }
+.duel-overview { margin-top:19px; padding-top:19px; border-top:1px solid #303129; }
+.duel-topline { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.awan-badge { display:inline-flex; align-items:center; gap:6px; padding:5px 8px; border-radius:99px; font:500 9px 'DM Mono',monospace; text-transform:uppercase; letter-spacing:.7px; }
+.awan-badge::before { content:""; width:5px; height:5px; border-radius:50%; background:currentColor; }
+.awan-badge-open { background:#27311c; color:#b9dc70; }
+.awan-badge-waiting { background:#342c1b; color:#e8bc68; }
+.awan-badge-settled { background:#29243a; color:#b9a6ef; }
+.bidder-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:18px; }
+.bidder-panel { min-width:0; padding:15px; border:1px solid #303129; border-radius:11px; background:#151611; }
+.bidder-panel.is-turn { border-color:#7e9143; background:linear-gradient(145deg,#202419,#171912); box-shadow:inset 0 0 0 1px #a8c65c12; }
+.bidder-label { display:flex; align-items:center; gap:7px; color:#999a90; font-size:11px; }
+.bidder-avatar { display:grid; place-items:center; width:22px; height:22px; border-radius:7px; background:#292b22; color:#cedd9d; font:500 11px 'DM Mono',monospace; }
+.is-turn .bidder-avatar { background:#d5f36a; color:#202411; }
+.turn-tag { margin-left:auto; color:#b6d86a; font:500 8px 'DM Mono',monospace; letter-spacing:.5px; }
+.bid-amount { display:block; margin:14px 0 5px; color:#f2f1e9; font:600 clamp(22px,5vw,30px) 'Space Grotesk',sans-serif; letter-spacing:-1px; }
+.bid-amount small { color:#929388; font:500 11px 'DM Mono',monospace; letter-spacing:0; }
+.wallet-short { color:#77796e; font:10px 'DM Mono',monospace; }
+.duel-meta { display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:15px 2px 3px; }
+.duel-meta div { display:flex; flex-direction:column; gap:6px; }
+.duel-meta span { color:#73756b; font:9px 'DM Mono',monospace; letter-spacing:.7px; }
+.duel-meta strong { overflow:hidden; color:#c9c9bf; font:11px 'DM Mono',monospace; text-overflow:ellipsis; }
+.duel-details { margin-top:12px; padding-top:11px; border-top:1px solid #303129; color:#8b8c82; font-size:11px; }
+.duel-details summary { cursor:pointer; }
+.awan-field { display:flex; justify-content:space-between; gap:12px; padding:9px 0; border-bottom:1px solid #2a2b25; font-size:11px; }
+.awan-field-label { color:#83847a; }
+.awan-field-value { max-width:70%; overflow-wrap:anywhere; color:#c7c8be; text-align:right; font:10px 'DM Mono',monospace; }
+.awan-error { margin:11px 0 0; color:#f08d83; font-size:12px; line-height:1.5; }
+.awan-settled-banner { margin:14px 0 0; padding:12px; border:1px solid #494064; border-radius:9px; background:#29243a; color:#c4b4ed; font-size:12px; }
+.concede-block { margin-top:22px; padding-top:19px; border-top:1px solid #303129; }
+.concede-block h2 { margin:0 0 9px; color:#d9b0a9; font-size:15px; }
+.listing-card { padding-bottom:18px; }
+.listing-layout { display:grid; grid-template-columns: 260px minmax(0,1fr); gap:18px; align-items:center; }
+.listing-form { display:flex; flex-direction:column; gap:12px; }
+.listing-field { display:flex; flex-direction:column; gap:8px; color:#9e9e94; font-size:11px; }
+.listing-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.listing-summary { display:flex; flex-direction:column; gap:4px; padding:12px 14px; border:1px solid #303129; border-radius:10px; background:#161712; }
+.listing-summary span { color:#909088; font:10px 'DM Mono',monospace; letter-spacing:.8px; text-transform:uppercase; }
+.listing-summary strong { color:#f2f1ef; font:600 16px 'Space Grotesk',sans-serif; }
+.listing-summary small { color:#b9b9b0; font:10px 'DM Mono',monospace; }
+.marketplace-block { margin:18px 0 20px; padding-top:18px; border-top:1px solid #303129; }
+.marketplace-block .section-heading { align-items:center; }
+.market-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); gap:11px; }
+.market-item { display:flex; flex-direction:column; gap:8px; padding:10px; border:1px solid #303129; border-radius:12px; background:#151611; color:#c9c9bf; text-align:left; cursor:pointer; transition:border-color .16s ease,transform .16s ease; }
+.market-item:hover { border-color:#899c4e; transform:translateY(-2px); }
+.market-item .nft-visual { min-height:125px; padding:10px; border-radius:9px; }
+.market-item .nft-visual__art { height:45px; }
+.market-item .nft-visual__orb { width:44px; height:44px; }
+.market-item .nft-visual__ring { width:65px; height:65px; }
+.market-item .nft-visual__footer strong { font-size:13px; }
+.market-item .market-price { color:#eef0dc; font:600 12px 'DM Mono',monospace; }
+.market-item small { color:#999a90; font-size:10px; }
+.market-item .market-name { overflow:hidden; color:#f0efe9; font:600 13px 'Space Grotesk',sans-serif; text-overflow:ellipsis; white-space:nowrap; }
+.market-item code { color:#a8c65c; font:10px 'DM Mono',monospace; }
+.nft-visual { isolation:isolate; }
+.nft-visual__image { position:absolute; z-index:0; inset:0; width:100%; height:100%; object-fit:cover; }
+.nft-visual__header, .nft-visual__art, .nft-visual__footer { position:relative; z-index:1; }
+.listing-field select.awan-input { width:100%; color:#eae9e4; background:#151611; }
+@media(max-width:520px) { .market-grid { grid-template-columns:1fr 1fr; } }
+@media(max-width:700px) { .nft-hero, .listing-layout { grid-template-columns:1fr; } }
+@media(max-width:520px) { .awan-app { width:min(100% - 28px,720px); padding-top:18px; } .awan-header { margin-bottom:35px; } .awan-header .wallet-adapter-button { padding:0 10px; font-size:12px; } .awan-card { padding:17px; } .intro h2 { letter-spacing:-1.8px; } .awan-pda-input { flex-basis:100%; } .load-card .awan-row .awan-button { width:100%; } .input-suffix { flex:1; } .bidder-panel { padding:12px; } .turn-tag { font-size:7px; } .role-switch { flex-direction:column; } .listing-row { grid-template-columns:1fr; } }

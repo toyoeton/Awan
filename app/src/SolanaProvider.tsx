@@ -6,9 +6,13 @@ import {
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import "@solana/wallet-adapter-react-ui/styles.css";
 
-// Point this at your local validator for now. Swap to a devnet/mainnet
-// RPC URL once Awan is deployed somewhere other than your machine.
-const RPC_ENDPOINT = "http://127.0.0.1:8899";
+// Set VITE_SOLANA_RPC_ENDPOINT for local validator rehearsal; Devnet is default.
+const RPC_ENDPOINT = import.meta.env.VITE_SOLANA_RPC_ENDPOINT ?? "https://api.devnet.solana.com";
+export const NETWORK_LABEL = RPC_ENDPOINT.includes("127.0.0.1") || RPC_ENDPOINT.includes("localhost")
+  ? "Solana Localnet"
+  : RPC_ENDPOINT.includes("devnet")
+    ? "Solana Devnet"
+    : "Solana network";
 
 export const SolanaProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const endpoint = useMemo(() => RPC_ENDPOINT, []);
