@@ -19,6 +19,8 @@ import {
   getAddressEncoder,
   getBytesDecoder,
   getBytesEncoder,
+  getI64Decoder,
+  getI64Encoder,
   getStructDecoder,
   getStructEncoder,
   getU64Decoder,
@@ -64,6 +66,9 @@ export type Duel = {
   bidA: bigint;
   bidB: bigint;
   turn: Address;
+  durationSeconds: bigint;
+  createdAt: bigint;
+  endsAt: bigint;
   status: DuelStatus;
   bump: number;
 };
@@ -78,6 +83,9 @@ export type DuelArgs = {
   bidA: number | bigint;
   bidB: number | bigint;
   turn: Address;
+  durationSeconds: number | bigint;
+  createdAt: number | bigint;
+  endsAt: number | bigint;
   status: DuelStatusArgs;
   bump: number;
 };
@@ -96,6 +104,9 @@ export function getDuelEncoder(): FixedSizeEncoder<DuelArgs> {
       ["bidA", getU64Encoder()],
       ["bidB", getU64Encoder()],
       ["turn", getAddressEncoder()],
+      ["durationSeconds", getI64Encoder()],
+      ["createdAt", getI64Encoder()],
+      ["endsAt", getI64Encoder()],
       ["status", getDuelStatusEncoder()],
       ["bump", getU8Encoder()],
     ]),
@@ -116,6 +127,9 @@ export function getDuelDecoder(): FixedSizeDecoder<Duel> {
     ["bidA", getU64Decoder()],
     ["bidB", getU64Decoder()],
     ["turn", getAddressDecoder()],
+    ["durationSeconds", getI64Decoder()],
+    ["createdAt", getI64Decoder()],
+    ["endsAt", getI64Decoder()],
     ["status", getDuelStatusDecoder()],
     ["bump", getU8Decoder()],
   ]);
@@ -180,5 +194,5 @@ export async function fetchAllMaybeDuel(
 }
 
 export function getDuelSize(): number {
-  return 202;
+  return 226;
 }

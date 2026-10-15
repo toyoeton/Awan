@@ -35,19 +35,23 @@ import {
 } from "@solana/program-client-core";
 import { getDuelCodec, type Duel, type DuelArgs } from "../accounts";
 import {
-  getConcedeInstructionAsync,
+  getCancelListingInstructionAsync,
   getCreateDuelInstructionAsync,
+  getFinalizeInstructionAsync,
   getJoinDuelInstructionAsync,
   getRaiseInstruction,
-  parseConcedeInstruction,
+  parseCancelListingInstruction,
   parseCreateDuelInstruction,
+  parseFinalizeInstruction,
   parseJoinDuelInstruction,
   parseRaiseInstruction,
-  type ConcedeAsyncInput,
+  type CancelListingAsyncInput,
   type CreateDuelAsyncInput,
+  type FinalizeAsyncInput,
   type JoinDuelAsyncInput,
-  type ParsedConcedeInstruction,
+  type ParsedCancelListingInstruction,
   type ParsedCreateDuelInstruction,
+  type ParsedFinalizeInstruction,
   type ParsedJoinDuelInstruction,
   type ParsedRaiseInstruction,
   type RaiseInput,
@@ -83,8 +87,9 @@ export function identifyAwanAccount(
 }
 
 export enum AwanInstruction {
-  Concede,
+  CancelListing,
   CreateDuel,
+  Finalize,
   JoinDuel,
   Raise,
 }
@@ -97,12 +102,12 @@ export function identifyAwanInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([19, 182, 3, 3, 43, 35, 60, 202]),
+        new Uint8Array([41, 183, 50, 232, 230, 233, 157, 70]),
       ),
       0,
     )
   ) {
-    return AwanInstruction.Concede;
+    return AwanInstruction.CancelListing;
   }
   if (
     containsBytes(
@@ -114,6 +119,17 @@ export function identifyAwanInstruction(
     )
   ) {
     return AwanInstruction.CreateDuel;
+  }
+  if (
+    containsBytes(
+      data,
+      fixEncoderSize(getBytesEncoder(), 8).encode(
+        new Uint8Array([171, 61, 218, 56, 127, 115, 12, 217]),
+      ),
+      0,
+    )
+  ) {
+    return AwanInstruction.Finalize;
   }
   if (
     containsBytes(
@@ -147,11 +163,14 @@ export type ParsedAwanInstruction<
   TProgram extends string = "8vZNXTex9JmPAADsTXVwwfTfVXUjbLBaTtassLD8dqvN",
 > =
   | ({
-      instructionType: AwanInstruction.Concede;
-    } & ParsedConcedeInstruction<TProgram>)
+      instructionType: AwanInstruction.CancelListing;
+    } & ParsedCancelListingInstruction<TProgram>)
   | ({
       instructionType: AwanInstruction.CreateDuel;
     } & ParsedCreateDuelInstruction<TProgram>)
+  | ({
+      instructionType: AwanInstruction.Finalize;
+    } & ParsedFinalizeInstruction<TProgram>)
   | ({
       instructionType: AwanInstruction.JoinDuel;
     } & ParsedJoinDuelInstruction<TProgram>)
@@ -164,11 +183,11 @@ export function parseAwanInstruction<TProgram extends string>(
 ): ParsedAwanInstruction<TProgram> {
   const instructionType = identifyAwanInstruction(instruction);
   switch (instructionType) {
-    case AwanInstruction.Concede: {
+    case AwanInstruction.CancelListing: {
       assertIsInstructionWithAccounts(instruction);
       return {
-        instructionType: AwanInstruction.Concede,
-        ...parseConcedeInstruction(instruction),
+        instructionType: AwanInstruction.CancelListing,
+        ...parseCancelListingInstruction(instruction),
       };
     }
     case AwanInstruction.CreateDuel: {
@@ -176,6 +195,13 @@ export function parseAwanInstruction<TProgram extends string>(
       return {
         instructionType: AwanInstruction.CreateDuel,
         ...parseCreateDuelInstruction(instruction),
+      };
+    }
+    case AwanInstruction.Finalize: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: AwanInstruction.Finalize,
+        ...parseFinalizeInstruction(instruction),
       };
     }
     case AwanInstruction.JoinDuel: {
@@ -214,12 +240,17 @@ export type AwanPluginAccounts = {
 };
 
 export type AwanPluginInstructions = {
-  concede: (
-    input: ConcedeAsyncInput,
-  ) => ReturnType<typeof getConcedeInstructionAsync> & SelfPlanAndSendFunctions;
+  cancelListing: (
+    input: CancelListingAsyncInput,
+  ) => ReturnType<typeof getCancelListingInstructionAsync> &
+    SelfPlanAndSendFunctions;
   createDuel: (
     input: CreateDuelAsyncInput,
   ) => ReturnType<typeof getCreateDuelInstructionAsync> &
+    SelfPlanAndSendFunctions;
+  finalize: (
+    input: FinalizeAsyncInput,
+  ) => ReturnType<typeof getFinalizeInstructionAsync> &
     SelfPlanAndSendFunctions;
   joinDuel: (
     input: JoinDuelAsyncInput,
@@ -249,15 +280,20 @@ export function awanProgram() {
       awan: <AwanPlugin>{
         accounts: { duel: addSelfFetchFunctions(client, getDuelCodec()) },
         instructions: {
-          concede: (input) =>
+          cancelListing: (input) =>
             addSelfPlanAndSendFunctions(
               client,
-              getConcedeInstructionAsync(input),
+              getCancelListingInstructionAsync(input),
             ),
           createDuel: (input) =>
             addSelfPlanAndSendFunctions(
               client,
               getCreateDuelInstructionAsync(input),
+            ),
+          finalize: (input) =>
+            addSelfPlanAndSendFunctions(
+              client,
+              getFinalizeInstructionAsync(input),
             ),
           joinDuel: (input) =>
             addSelfPlanAndSendFunctions(

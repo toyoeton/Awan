@@ -45,21 +45,22 @@ import {
 import { findVaultPda } from "../pdas";
 import { AWAN_PROGRAM_ADDRESS } from "../programs";
 
-export const CONCEDE_DISCRIMINATOR: ReadonlyUint8Array = new Uint8Array([
-  19, 182, 3, 3, 43, 35, 60, 202,
+export const FINALIZE_DISCRIMINATOR: ReadonlyUint8Array = new Uint8Array([
+  171, 61, 218, 56, 127, 115, 12, 217,
 ]);
 
-export function getConcedeDiscriminatorBytes(): ReadonlyUint8Array {
-  return fixEncoderSize(getBytesEncoder(), 8).encode(CONCEDE_DISCRIMINATOR);
+export function getFinalizeDiscriminatorBytes(): ReadonlyUint8Array {
+  return fixEncoderSize(getBytesEncoder(), 8).encode(FINALIZE_DISCRIMINATOR);
 }
 
-export type ConcedeInstruction<
+export type FinalizeInstruction<
   TProgram extends string = typeof AWAN_PROGRAM_ADDRESS,
-  TAccountConceder extends string | AccountMeta<string> = string,
+  TAccountCaller extends string | AccountMeta<string> = string,
   TAccountDuel extends string | AccountMeta<string> = string,
   TAccountVault extends string | AccountMeta<string> = string,
   TAccountSeller extends string | AccountMeta<string> = string,
   TAccountWinner extends string | AccountMeta<string> = string,
+  TAccountLoser extends string | AccountMeta<string> = string,
   TAccountNftMint extends string | AccountMeta<string> = string,
   TAccountVaultNftAccount extends string | AccountMeta<string> = string,
   TAccountWinnerNftAccount extends string | AccountMeta<string> = string,
@@ -74,10 +75,10 @@ export type ConcedeInstruction<
   InstructionWithData<ReadonlyUint8Array> &
   InstructionWithAccounts<
     [
-      TAccountConceder extends string
-        ? WritableSignerAccount<TAccountConceder> &
-            AccountSignerMeta<TAccountConceder>
-        : TAccountConceder,
+      TAccountCaller extends string
+        ? WritableSignerAccount<TAccountCaller> &
+            AccountSignerMeta<TAccountCaller>
+        : TAccountCaller,
       TAccountDuel extends string
         ? WritableAccount<TAccountDuel>
         : TAccountDuel,
@@ -90,6 +91,9 @@ export type ConcedeInstruction<
       TAccountWinner extends string
         ? WritableAccount<TAccountWinner>
         : TAccountWinner,
+      TAccountLoser extends string
+        ? WritableAccount<TAccountLoser>
+        : TAccountLoser,
       TAccountNftMint extends string
         ? ReadonlyAccount<TAccountNftMint>
         : TAccountNftMint,
@@ -112,39 +116,40 @@ export type ConcedeInstruction<
     ]
   >;
 
-export type ConcedeInstructionData = { discriminator: ReadonlyUint8Array };
+export type FinalizeInstructionData = { discriminator: ReadonlyUint8Array };
 
-export type ConcedeInstructionDataArgs = {};
+export type FinalizeInstructionDataArgs = {};
 
-export function getConcedeInstructionDataEncoder(): FixedSizeEncoder<ConcedeInstructionDataArgs> {
+export function getFinalizeInstructionDataEncoder(): FixedSizeEncoder<FinalizeInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([["discriminator", fixEncoderSize(getBytesEncoder(), 8)]]),
-    (value) => ({ ...value, discriminator: CONCEDE_DISCRIMINATOR }),
+    (value) => ({ ...value, discriminator: FINALIZE_DISCRIMINATOR }),
   );
 }
 
-export function getConcedeInstructionDataDecoder(): FixedSizeDecoder<ConcedeInstructionData> {
+export function getFinalizeInstructionDataDecoder(): FixedSizeDecoder<FinalizeInstructionData> {
   return getStructDecoder([
     ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
   ]);
 }
 
-export function getConcedeInstructionDataCodec(): FixedSizeCodec<
-  ConcedeInstructionDataArgs,
-  ConcedeInstructionData
+export function getFinalizeInstructionDataCodec(): FixedSizeCodec<
+  FinalizeInstructionDataArgs,
+  FinalizeInstructionData
 > {
   return combineCodec(
-    getConcedeInstructionDataEncoder(),
-    getConcedeInstructionDataDecoder(),
+    getFinalizeInstructionDataEncoder(),
+    getFinalizeInstructionDataDecoder(),
   );
 }
 
-export type ConcedeAsyncInput<
-  TAccountConceder extends InstructionSignerInput = InstructionSignerInput,
+export type FinalizeAsyncInput<
+  TAccountCaller extends InstructionSignerInput = InstructionSignerInput,
   TAccountDuel extends InstructionAccountInput = InstructionAccountInput,
   TAccountVault extends InstructionAccountInput = InstructionAccountInput,
   TAccountSeller extends InstructionAccountInput = InstructionAccountInput,
   TAccountWinner extends InstructionAccountInput = InstructionAccountInput,
+  TAccountLoser extends InstructionAccountInput = InstructionAccountInput,
   TAccountNftMint extends InstructionAccountInput = InstructionAccountInput,
   TAccountVaultNftAccount extends InstructionAccountInput =
     InstructionAccountInput,
@@ -157,11 +162,12 @@ export type ConcedeAsyncInput<
   TAccountSystemProgram extends InstructionAccountInput =
     InstructionAccountInput,
 > = {
-  conceder: TAccountConceder;
+  caller: TAccountCaller;
   duel: TAccountDuel;
   vault?: TAccountVault;
   seller: TAccountSeller;
   winner: TAccountWinner;
+  loser: TAccountLoser;
   nftMint: TAccountNftMint;
   vaultNftAccount?: TAccountVaultNftAccount;
   winnerNftAccount?: TAccountWinnerNftAccount;
@@ -170,12 +176,13 @@ export type ConcedeAsyncInput<
   systemProgram?: TAccountSystemProgram;
 };
 
-export async function getConcedeInstructionAsync<
-  TAccountConceder extends InstructionSignerInput,
+export async function getFinalizeInstructionAsync<
+  TAccountCaller extends InstructionSignerInput,
   TAccountDuel extends InstructionAccountInput,
   TAccountVault extends InstructionAccountInput,
   TAccountSeller extends InstructionAccountInput,
   TAccountWinner extends InstructionAccountInput,
+  TAccountLoser extends InstructionAccountInput,
   TAccountNftMint extends InstructionAccountInput,
   TAccountVaultNftAccount extends InstructionAccountInput,
   TAccountWinnerNftAccount extends InstructionAccountInput,
@@ -184,12 +191,13 @@ export async function getConcedeInstructionAsync<
   TAccountSystemProgram extends InstructionAccountInput,
   TProgramAddress extends Address = typeof AWAN_PROGRAM_ADDRESS,
 >(
-  input: ConcedeAsyncInput<
-    TAccountConceder,
+  input: FinalizeAsyncInput<
+    TAccountCaller,
     TAccountDuel,
     TAccountVault,
     TAccountSeller,
     TAccountWinner,
+    TAccountLoser,
     TAccountNftMint,
     TAccountVaultNftAccount,
     TAccountWinnerNftAccount,
@@ -199,11 +207,11 @@ export async function getConcedeInstructionAsync<
   >,
   config?: { programAddress?: TProgramAddress },
 ): Promise<
-  ConcedeInstruction<
+  FinalizeInstruction<
     TProgramAddress,
     ResolvedInstructionAccountMeta<
-      TAccountConceder,
-      InstructionAccountInputAddress<TAccountConceder>
+      TAccountCaller,
+      InstructionAccountInputAddress<TAccountCaller>
     >,
     ResolvedInstructionAccountMeta<
       TAccountDuel,
@@ -220,6 +228,10 @@ export async function getConcedeInstructionAsync<
     ResolvedInstructionAccountMeta<
       TAccountWinner,
       InstructionAccountInputAddress<TAccountWinner>
+    >,
+    ResolvedInstructionAccountMeta<
+      TAccountLoser,
+      InstructionAccountInputAddress<TAccountLoser>
     >,
     ResolvedInstructionAccountMeta<
       TAccountNftMint,
@@ -255,15 +267,12 @@ export async function getConcedeInstructionAsync<
 
   // Original accounts.
   const originalAccounts = {
-    conceder: {
-      value: input.conceder ?? null,
-      isSigner: true,
-      isWritable: true,
-    },
+    caller: { value: input.caller ?? null, isSigner: true, isWritable: true },
     duel: { value: input.duel ?? null, isSigner: false, isWritable: true },
     vault: { value: input.vault ?? null, isSigner: false, isWritable: true },
     seller: { value: input.seller ?? null, isSigner: false, isWritable: true },
     winner: { value: input.winner ?? null, isSigner: false, isWritable: true },
+    loser: { value: input.loser ?? null, isSigner: false, isWritable: true },
     nftMint: {
       value: input.nftMint ?? null,
       isSigner: false,
@@ -381,11 +390,12 @@ export async function getConcedeInstructionAsync<
 
   return Object.freeze({
     accounts: [
-      getAccountMeta("conceder", accounts.conceder),
+      getAccountMeta("caller", accounts.caller),
       getAccountMeta("duel", accounts.duel),
       getAccountMeta("vault", accounts.vault),
       getAccountMeta("seller", accounts.seller),
       getAccountMeta("winner", accounts.winner),
+      getAccountMeta("loser", accounts.loser),
       getAccountMeta("nftMint", accounts.nftMint),
       getAccountMeta("vaultNftAccount", accounts.vaultNftAccount),
       getAccountMeta("winnerNftAccount", accounts.winnerNftAccount),
@@ -393,13 +403,13 @@ export async function getConcedeInstructionAsync<
       getAccountMeta("associatedTokenProgram", accounts.associatedTokenProgram),
       getAccountMeta("systemProgram", accounts.systemProgram),
     ],
-    data: getConcedeInstructionDataEncoder().encode({}),
+    data: getFinalizeInstructionDataEncoder().encode({}),
     programAddress,
-  } as ConcedeInstruction<
+  } as FinalizeInstruction<
     TProgramAddress,
     ResolvedInstructionAccountMeta<
-      TAccountConceder,
-      InstructionAccountInputAddress<TAccountConceder>
+      TAccountCaller,
+      InstructionAccountInputAddress<TAccountCaller>
     >,
     ResolvedInstructionAccountMeta<
       TAccountDuel,
@@ -416,6 +426,10 @@ export async function getConcedeInstructionAsync<
     ResolvedInstructionAccountMeta<
       TAccountWinner,
       InstructionAccountInputAddress<TAccountWinner>
+    >,
+    ResolvedInstructionAccountMeta<
+      TAccountLoser,
+      InstructionAccountInputAddress<TAccountLoser>
     >,
     ResolvedInstructionAccountMeta<
       TAccountNftMint,
@@ -444,12 +458,13 @@ export async function getConcedeInstructionAsync<
   >);
 }
 
-export type ConcedeInput<
-  TAccountConceder extends InstructionSignerInput = InstructionSignerInput,
+export type FinalizeInput<
+  TAccountCaller extends InstructionSignerInput = InstructionSignerInput,
   TAccountDuel extends InstructionAccountInput = InstructionAccountInput,
   TAccountVault extends InstructionAccountInput = InstructionAccountInput,
   TAccountSeller extends InstructionAccountInput = InstructionAccountInput,
   TAccountWinner extends InstructionAccountInput = InstructionAccountInput,
+  TAccountLoser extends InstructionAccountInput = InstructionAccountInput,
   TAccountNftMint extends InstructionAccountInput = InstructionAccountInput,
   TAccountVaultNftAccount extends InstructionAccountInput =
     InstructionAccountInput,
@@ -462,11 +477,12 @@ export type ConcedeInput<
   TAccountSystemProgram extends InstructionAccountInput =
     InstructionAccountInput,
 > = {
-  conceder: TAccountConceder;
+  caller: TAccountCaller;
   duel: TAccountDuel;
   vault: TAccountVault;
   seller: TAccountSeller;
   winner: TAccountWinner;
+  loser: TAccountLoser;
   nftMint: TAccountNftMint;
   vaultNftAccount: TAccountVaultNftAccount;
   winnerNftAccount: TAccountWinnerNftAccount;
@@ -475,12 +491,13 @@ export type ConcedeInput<
   systemProgram?: TAccountSystemProgram;
 };
 
-export function getConcedeInstruction<
-  TAccountConceder extends InstructionSignerInput,
+export function getFinalizeInstruction<
+  TAccountCaller extends InstructionSignerInput,
   TAccountDuel extends InstructionAccountInput,
   TAccountVault extends InstructionAccountInput,
   TAccountSeller extends InstructionAccountInput,
   TAccountWinner extends InstructionAccountInput,
+  TAccountLoser extends InstructionAccountInput,
   TAccountNftMint extends InstructionAccountInput,
   TAccountVaultNftAccount extends InstructionAccountInput,
   TAccountWinnerNftAccount extends InstructionAccountInput,
@@ -489,12 +506,13 @@ export function getConcedeInstruction<
   TAccountSystemProgram extends InstructionAccountInput,
   TProgramAddress extends Address = typeof AWAN_PROGRAM_ADDRESS,
 >(
-  input: ConcedeInput<
-    TAccountConceder,
+  input: FinalizeInput<
+    TAccountCaller,
     TAccountDuel,
     TAccountVault,
     TAccountSeller,
     TAccountWinner,
+    TAccountLoser,
     TAccountNftMint,
     TAccountVaultNftAccount,
     TAccountWinnerNftAccount,
@@ -503,11 +521,11 @@ export function getConcedeInstruction<
     TAccountSystemProgram
   >,
   config?: { programAddress?: TProgramAddress },
-): ConcedeInstruction<
+): FinalizeInstruction<
   TProgramAddress,
   ResolvedInstructionAccountMeta<
-    TAccountConceder,
-    InstructionAccountInputAddress<TAccountConceder>
+    TAccountCaller,
+    InstructionAccountInputAddress<TAccountCaller>
   >,
   ResolvedInstructionAccountMeta<
     TAccountDuel,
@@ -524,6 +542,10 @@ export function getConcedeInstruction<
   ResolvedInstructionAccountMeta<
     TAccountWinner,
     InstructionAccountInputAddress<TAccountWinner>
+  >,
+  ResolvedInstructionAccountMeta<
+    TAccountLoser,
+    InstructionAccountInputAddress<TAccountLoser>
   >,
   ResolvedInstructionAccountMeta<
     TAccountNftMint,
@@ -558,15 +580,12 @@ export function getConcedeInstruction<
 
   // Original accounts.
   const originalAccounts = {
-    conceder: {
-      value: input.conceder ?? null,
-      isSigner: true,
-      isWritable: true,
-    },
+    caller: { value: input.caller ?? null, isSigner: true, isWritable: true },
     duel: { value: input.duel ?? null, isSigner: false, isWritable: true },
     vault: { value: input.vault ?? null, isSigner: false, isWritable: true },
     seller: { value: input.seller ?? null, isSigner: false, isWritable: true },
     winner: { value: input.winner ?? null, isSigner: false, isWritable: true },
+    loser: { value: input.loser ?? null, isSigner: false, isWritable: true },
     nftMint: {
       value: input.nftMint ?? null,
       isSigner: false,
@@ -619,11 +638,12 @@ export function getConcedeInstruction<
 
   return Object.freeze({
     accounts: [
-      getAccountMeta("conceder", accounts.conceder),
+      getAccountMeta("caller", accounts.caller),
       getAccountMeta("duel", accounts.duel),
       getAccountMeta("vault", accounts.vault),
       getAccountMeta("seller", accounts.seller),
       getAccountMeta("winner", accounts.winner),
+      getAccountMeta("loser", accounts.loser),
       getAccountMeta("nftMint", accounts.nftMint),
       getAccountMeta("vaultNftAccount", accounts.vaultNftAccount),
       getAccountMeta("winnerNftAccount", accounts.winnerNftAccount),
@@ -631,13 +651,13 @@ export function getConcedeInstruction<
       getAccountMeta("associatedTokenProgram", accounts.associatedTokenProgram),
       getAccountMeta("systemProgram", accounts.systemProgram),
     ],
-    data: getConcedeInstructionDataEncoder().encode({}),
+    data: getFinalizeInstructionDataEncoder().encode({}),
     programAddress,
-  } as ConcedeInstruction<
+  } as FinalizeInstruction<
     TProgramAddress,
     ResolvedInstructionAccountMeta<
-      TAccountConceder,
-      InstructionAccountInputAddress<TAccountConceder>
+      TAccountCaller,
+      InstructionAccountInputAddress<TAccountCaller>
     >,
     ResolvedInstructionAccountMeta<
       TAccountDuel,
@@ -654,6 +674,10 @@ export function getConcedeInstruction<
     ResolvedInstructionAccountMeta<
       TAccountWinner,
       InstructionAccountInputAddress<TAccountWinner>
+    >,
+    ResolvedInstructionAccountMeta<
+      TAccountLoser,
+      InstructionAccountInputAddress<TAccountLoser>
     >,
     ResolvedInstructionAccountMeta<
       TAccountNftMint,
@@ -682,41 +706,42 @@ export function getConcedeInstruction<
   >);
 }
 
-export type ParsedConcedeInstruction<
+export type ParsedFinalizeInstruction<
   TProgram extends string = typeof AWAN_PROGRAM_ADDRESS,
   TAccountMetas extends readonly AccountMeta[] = readonly AccountMeta[],
 > = {
   programAddress: Address<TProgram>;
   accounts: {
-    conceder: TAccountMetas[0];
+    caller: TAccountMetas[0];
     duel: TAccountMetas[1];
     vault: TAccountMetas[2];
     seller: TAccountMetas[3];
     winner: TAccountMetas[4];
-    nftMint: TAccountMetas[5];
-    vaultNftAccount: TAccountMetas[6];
-    winnerNftAccount: TAccountMetas[7];
-    tokenProgram: TAccountMetas[8];
-    associatedTokenProgram: TAccountMetas[9];
-    systemProgram: TAccountMetas[10];
+    loser: TAccountMetas[5];
+    nftMint: TAccountMetas[6];
+    vaultNftAccount: TAccountMetas[7];
+    winnerNftAccount: TAccountMetas[8];
+    tokenProgram: TAccountMetas[9];
+    associatedTokenProgram: TAccountMetas[10];
+    systemProgram: TAccountMetas[11];
   };
-  data: ConcedeInstructionData;
+  data: FinalizeInstructionData;
 };
 
-export function parseConcedeInstruction<
+export function parseFinalizeInstruction<
   TProgram extends string,
   TAccountMetas extends readonly AccountMeta[],
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
     InstructionWithData<ReadonlyUint8Array>,
-): ParsedConcedeInstruction<TProgram, TAccountMetas> {
-  if (instruction.accounts.length < 11) {
+): ParsedFinalizeInstruction<TProgram, TAccountMetas> {
+  if (instruction.accounts.length < 12) {
     throw new SolanaError(
       SOLANA_ERROR__PROGRAM_CLIENTS__INSUFFICIENT_ACCOUNT_METAS,
       {
         actualAccountMetas: instruction.accounts.length,
-        expectedAccountMetas: 11,
+        expectedAccountMetas: 12,
       },
     );
   }
@@ -729,11 +754,12 @@ export function parseConcedeInstruction<
   return {
     programAddress: instruction.programAddress,
     accounts: {
-      conceder: getNextAccount(),
+      caller: getNextAccount(),
       duel: getNextAccount(),
       vault: getNextAccount(),
       seller: getNextAccount(),
       winner: getNextAccount(),
+      loser: getNextAccount(),
       nftMint: getNextAccount(),
       vaultNftAccount: getNextAccount(),
       winnerNftAccount: getNextAccount(),
@@ -741,6 +767,6 @@ export function parseConcedeInstruction<
       associatedTokenProgram: getNextAccount(),
       systemProgram: getNextAccount(),
     },
-    data: getConcedeInstructionDataDecoder().decode(instruction.data),
+    data: getFinalizeInstructionDataDecoder().decode(instruction.data),
   };
 }

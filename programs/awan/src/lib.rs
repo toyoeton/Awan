@@ -15,8 +15,8 @@ declare_id!("8vZNXTex9JmPAADsTXVwwfTfVXUjbLBaTtassLD8dqvN");
 pub mod awan {
     use super::*;
  
-    pub fn create_duel(ctx: Context<CreateDuel>, min_price: u64, max_price: u64) -> Result<()> {
-        ctx.accounts.create_duel(min_price, max_price, &ctx.bumps)?;
+    pub fn create_duel(ctx: Context<CreateDuel>, min_price: u64, max_price: u64, duration_seconds: i64) -> Result<()> {
+        ctx.accounts.create_duel(min_price, max_price, duration_seconds, &ctx.bumps)?;
         Ok(())
     }
  
@@ -30,8 +30,11 @@ pub mod awan {
         Ok(())
     }
 
-    pub fn concede(ctx: Context<Concede>) -> Result<()> {
-        ctx.accounts.concede(&ctx.bumps)?;
-        Ok(())
+    pub fn finalize(ctx: Context<Finalize>) -> Result<()> {
+        ctx.accounts.finalize(&ctx.bumps)
+    }
+
+    pub fn cancel_listing(ctx: Context<CancelListing>) -> Result<()> {
+        ctx.accounts.cancel_listing(&ctx.bumps)
     }
 }

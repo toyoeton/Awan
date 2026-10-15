@@ -6,7 +6,8 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from "./concede";
+export * from "./cancelListing";
 export * from "./createDuel";
+export * from "./finalize";
 export * from "./joinDuel";
 export * from "./raise";

@@ -16,7 +16,7 @@ import { AWAN_PROGRAM_ADDRESS } from "../programs";
 
 /** NotYourTurn: It is not your turn. */
 export const AWAN_ERROR__NOT_YOUR_TURN = 0x1770; // 6000
-/** RaiseTooLow: Raise amount must be higher than the current bid. */
+/** RaiseTooLow: Raise amount must beat the other bidder's current bid. */
 export const AWAN_ERROR__RAISE_TOO_LOW = 0x1771; // 6001
 /** BidAboveMax: Bid cannot exceed the maximum price. */
 export const AWAN_ERROR__BID_ABOVE_MAX = 0x1772; // 6002
@@ -26,24 +26,40 @@ export const AWAN_ERROR__BID_BELOW_MIN = 0x1773; // 6003
 export const AWAN_ERROR__DUEL_NOT_FULL = 0x1774; // 6004
 /** DuelSettled: This duel has already been settled. */
 export const AWAN_ERROR__DUEL_SETTLED = 0x1775; // 6005
+/** AlreadyJoined: This bidder has already joined this duel. */
+export const AWAN_ERROR__ALREADY_JOINED = 0x1776; // 6006
+/** InvalidDuration: Auction duration must be between one minute and thirty days. */
+export const AWAN_ERROR__INVALID_DURATION = 0x1777; // 6007
+/** AuctionStillOpen: The auction has not ended yet. */
+export const AWAN_ERROR__AUCTION_STILL_OPEN = 0x1778; // 6008
+/** AuctionEnded: The auction deadline has passed. */
+export const AWAN_ERROR__AUCTION_ENDED = 0x1779; // 6009
 
 export type AwanError =
+  | typeof AWAN_ERROR__ALREADY_JOINED
+  | typeof AWAN_ERROR__AUCTION_ENDED
+  | typeof AWAN_ERROR__AUCTION_STILL_OPEN
   | typeof AWAN_ERROR__BID_ABOVE_MAX
   | typeof AWAN_ERROR__BID_BELOW_MIN
   | typeof AWAN_ERROR__DUEL_NOT_FULL
   | typeof AWAN_ERROR__DUEL_SETTLED
+  | typeof AWAN_ERROR__INVALID_DURATION
   | typeof AWAN_ERROR__NOT_YOUR_TURN
   | typeof AWAN_ERROR__RAISE_TOO_LOW;
 
 let awanErrorMessages: Record<AwanError, string> | undefined;
 if (process.env["NODE_ENV"] !== "production") {
   awanErrorMessages = {
+    [AWAN_ERROR__ALREADY_JOINED]: `This bidder has already joined this duel.`,
+    [AWAN_ERROR__AUCTION_ENDED]: `The auction deadline has passed.`,
+    [AWAN_ERROR__AUCTION_STILL_OPEN]: `The auction has not ended yet.`,
     [AWAN_ERROR__BID_ABOVE_MAX]: `Bid cannot exceed the maximum price.`,
     [AWAN_ERROR__BID_BELOW_MIN]: `Opening bid must be at least the minimum price.`,
     [AWAN_ERROR__DUEL_NOT_FULL]: `Both bidders must join before the duel can start.`,
     [AWAN_ERROR__DUEL_SETTLED]: `This duel has already been settled.`,
+    [AWAN_ERROR__INVALID_DURATION]: `Auction duration must be between one minute and thirty days.`,
     [AWAN_ERROR__NOT_YOUR_TURN]: `It is not your turn.`,
-    [AWAN_ERROR__RAISE_TOO_LOW]: `Raise amount must be higher than the current bid.`,
+    [AWAN_ERROR__RAISE_TOO_LOW]: `Raise amount must beat the other bidder's current bid.`,
   };
 }
 

@@ -72,7 +72,7 @@ describe("awan", () => {
 
   it("Create Duel", async () => {
     const tx = await program.methods
-      .createDuel(minPrice, maxPrice)
+      .createDuel(minPrice, maxPrice, new BN(60))
       .accountsPartial({
         seller: seller.publicKey,
         nftMint,
@@ -142,20 +142,23 @@ describe("awan", () => {
     assert.equal(duelAccount.bidB.toNumber(), 5 * LAMPORTS_PER_SOL);
   });
 
-  it("Concede - settles the duel", async () => {
+  it("Settles after the bidding deadline", async () => {
+    await new Promise((resolve) => setTimeout(resolve, 61_000));
     const winnerNftAccount = getAssociatedTokenAddressSync(nftMint, bidderB.publicKey);
 
     const sellerBefore = await provider.connection.getBalance(seller.publicKey);
     const winnerBefore = await provider.connection.getBalance(bidderB.publicKey);
+    const loserBefore = await provider.connection.getBalance(bidderA.publicKey);
 
     const tx = await program.methods
-      .concede()
+      .finalize()
       .accountsPartial({
-        conceder: bidderA.publicKey,
+        caller: wallet.publicKey,
         duel,
         vault,
         seller: seller.publicKey,
         winner: bidderB.publicKey,
+        loser: bidderA.publicKey,
         nftMint,
         vaultNftAccount,
         winnerNftAccount,
@@ -163,11 +166,10 @@ describe("awan", () => {
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         systemProgram: SystemProgram.programId,
       })
-      .signers([bidderA])
       .rpc()
       .then(confirm);
 
-    console.log("\nbidderA conceded, bidderB wins", tx);
+    console.log("\nAuction deadline passed, bidderB wins", tx);
 
     const sellerAfter = await provider.connection.getBalance(seller.publicKey);
     const winnerAfter = await provider.connection.getBalance(bidderB.publicKey);
@@ -176,8 +178,10 @@ describe("awan", () => {
     assert.approximately(sellerAfter - sellerBefore, 5 * LAMPORTS_PER_SOL, 0.01 * LAMPORTS_PER_SOL);
     console.log("Seller received", (sellerAfter - sellerBefore) / LAMPORTS_PER_SOL, "SOL");
 
-    // Winner got back their 5 SOL overflow (locked 10, only owed 5), minus their own tx fees.
-    assert.isAbove(winnerAfter, winnerBefore);
+    // Winner paid 10 SOL into escrow and got the 5 SOL overflow back (minus fees).
+    assert.approximately(winnerAfter - winnerBefore, -5 * LAMPORTS_PER_SOL, 0.05 * LAMPORTS_PER_SOL);
+    const loserAfter = await provider.connection.getBalance(bidderA.publicKey);
+    assert.approximately(loserAfter - loserBefore, 0, 0.05 * LAMPORTS_PER_SOL);
 
     const winnerAccount = await getOrCreateAssociatedTokenAccount(
       provider.connection,

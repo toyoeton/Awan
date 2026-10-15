@@ -51,9 +51,11 @@ impl<'info> CreateDuel<'info> {
         &mut self,
         min_price: u64,
         max_price: u64,
+        duration_seconds: i64,
         bumps: &CreateDuelBumps,
     ) -> Result<()> {
         require!(max_price > min_price, AwanError::BidBelowMin);
+        require!((60..=2_592_000).contains(&duration_seconds), AwanError::InvalidDuration);
 
         self.duel.set_inner(Duel {
             seller: self.seller.key(),
@@ -65,6 +67,9 @@ impl<'info> CreateDuel<'info> {
             bid_a: 0,
             bid_b: 0,
             turn: Pubkey::default(),
+            duration_seconds,
+            created_at: Clock::get()?.unix_timestamp,
+            ends_at: 0,
             status: DuelStatus::AwaitingBidders,
             bump: bumps.duel,
         });

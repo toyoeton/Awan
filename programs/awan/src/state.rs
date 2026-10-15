@@ -13,6 +13,9 @@ pub struct Duel {
     pub bid_a: u64,          // bidder_a's current bid (just a number until settlement)
     pub bid_b: u64,
     pub turn: Pubkey,
+    pub duration_seconds: i64,
+    pub created_at: i64,
+    pub ends_at: i64,
     pub status: DuelStatus,
     pub bump: u8,
 }
@@ -20,6 +23,6 @@ pub struct Duel {
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq, Eq, InitSpace)]
 pub enum DuelStatus {
     AwaitingBidders, // seller has listed, waiting for both bidders to join and lock max_price
-    Open,            // both bidders joined, raise/concede loop is active
+    Open,            // both bidders joined and timed bidding is active
     Settled,
 }

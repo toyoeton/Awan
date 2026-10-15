@@ -13,6 +13,8 @@ import {
   getAddressEncoder,
   getBytesDecoder,
   getBytesEncoder,
+  getI64Decoder,
+  getI64Encoder,
   getProgramDerivedAddress,
   getStructDecoder,
   getStructEncoder,
@@ -110,11 +112,13 @@ export type CreateDuelInstructionData = {
   discriminator: ReadonlyUint8Array;
   minPrice: bigint;
   maxPrice: bigint;
+  durationSeconds: bigint;
 };
 
 export type CreateDuelInstructionDataArgs = {
   minPrice: number | bigint;
   maxPrice: number | bigint;
+  durationSeconds: number | bigint;
 };
 
 export function getCreateDuelInstructionDataEncoder(): FixedSizeEncoder<CreateDuelInstructionDataArgs> {
@@ -123,6 +127,7 @@ export function getCreateDuelInstructionDataEncoder(): FixedSizeEncoder<CreateDu
       ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
       ["minPrice", getU64Encoder()],
       ["maxPrice", getU64Encoder()],
+      ["durationSeconds", getI64Encoder()],
     ]),
     (value) => ({ ...value, discriminator: CREATE_DUEL_DISCRIMINATOR }),
   );
@@ -133,6 +138,7 @@ export function getCreateDuelInstructionDataDecoder(): FixedSizeDecoder<CreateDu
     ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
     ["minPrice", getU64Decoder()],
     ["maxPrice", getU64Decoder()],
+    ["durationSeconds", getI64Decoder()],
   ]);
 }
 
@@ -173,6 +179,7 @@ export type CreateDuelAsyncInput<
   systemProgram?: TAccountSystemProgram;
   minPrice: CreateDuelInstructionDataArgs["minPrice"];
   maxPrice: CreateDuelInstructionDataArgs["maxPrice"];
+  durationSeconds: CreateDuelInstructionDataArgs["durationSeconds"];
 };
 
 export async function getCreateDuelInstructionAsync<
@@ -468,6 +475,7 @@ export type CreateDuelInput<
   systemProgram?: TAccountSystemProgram;
   minPrice: CreateDuelInstructionDataArgs["minPrice"];
   maxPrice: CreateDuelInstructionDataArgs["maxPrice"];
+  durationSeconds: CreateDuelInstructionDataArgs["durationSeconds"];
 };
 
 export function getCreateDuelInstruction<

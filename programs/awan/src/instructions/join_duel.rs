@@ -24,6 +24,7 @@ impl<'info> JoinDuel<'info> {
             self.duel.status == DuelStatus::AwaitingBidders,
             AwanError::DuelSettled
         );
+        require!(Clock::get()?.unix_timestamp < self.duel.created_at + self.duel.duration_seconds, AwanError::AuctionEnded);
         require!(opening_bid >= self.duel.min_price, AwanError::BidBelowMin);
         require!(opening_bid <= self.duel.max_price, AwanError::BidAboveMax);
 
@@ -51,6 +52,7 @@ impl<'info> JoinDuel<'info> {
             // Both bidders are in, the duel goes live. bidder_a raises first.
             self.duel.status = DuelStatus::Open;
             self.duel.turn = self.duel.bidder_a;
+            self.duel.ends_at = Clock::get()?.unix_timestamp + self.duel.duration_seconds;
         }
 
         Ok(())
